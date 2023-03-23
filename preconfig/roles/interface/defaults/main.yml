@@ -1,0 +1,50 @@
+
+interface_default_file: /etc/network/interfaces
+interface_directory: '{{ interface_default_file }}.d'
+interface_file_name:
+interface_file: >-
+    {%- if interface_file_name is defined and interface_file_name -%}
+        {{ interface_directory }}/{{ interface_file_name }}
+    {%- else -%}
+        {{ interface_default_file }}
+    {%- endif -%}
+
+interface_clean: True
+
+interface_identification:
+interface_name: >-
+    {%- import "roles/common/templates/network.j2" as network with context -%}
+    {%- if interface_identification in ansible_interfaces -%}
+        {{ interface_identification }}
+    {%- elif interface_identification | regex_search("^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$") -%}
+        {{ network.ip_to_interface(interface_identification) }}
+    {%- elif interface_identification | regex_search("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")-%}
+        {{ network.mac_to_interface(interface_identification) }}
+    {%- else -%}
+        ""
+    {%- endif -%}
+interface_configuration_type: dhcp
+
+interface_static_ip:
+interface_static_netmask:
+
+interface_mtu: 1442
+interface_default_gateway:
+interface_routes: []
+# - gateway:
+#   network:
+#   netmask:
+
+interface_sanity_check_msg: >-
+    {%- if not interface_identification -%}
+        interface_identification is not set,
+    {%- endif -%}
+    {%- if interface_configuration_type not in ["dhcp", "static"] -%}
+        unknown interface_configuration_type,
+    {%- endif -%}
+    {%- if interface_configuration_type == "static" and
+            (interface_static_ip is undefined or not interface_static_ip or
+            interface_static_netmask is undefined or not interface_static_netmask) -%}
+        interface_static_ip or interface_static_netmask is not defined
+    {%- endif -%}
+

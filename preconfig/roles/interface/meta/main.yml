@@ -1,0 +1,19 @@
+
+dependencies:
+    - src: git@gitlab.ics.muni.cz:CSIRT-MU-public/ansible-roles/common.git
+      scm: git
+
+galaxy_info:
+    role_name: interface
+    author: Kamil Andoniadis
+    description: Basic network interface configuration
+    licence: MIT
+    min_ansible_version: 2.8
+    platforms:
+        - name: Debian
+          versions:
+              - all
+        - name: Ubuntu
+          versions:
+              - all
+

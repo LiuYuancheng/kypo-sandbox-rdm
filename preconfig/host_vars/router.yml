@@ -1,0 +1,11 @@
+---
+routes:
+- interface_default_gateway: '{{ ansible_default_ipv4.gateway }}'
+  interface_ip: '{{ ansible_default_ipv4.address  | default(ansible_all_ipv4_addresses[0])
+    }}'
+  interface_netmask: '{{ ansible_default_ipv4.netmask  | default(''24'') }}'
+- interface_default_gateway: ''
+  interface_ip: 100.100.100.1
+  interface_netmask: 255.255.255.0
+  interface_routes: []
+...

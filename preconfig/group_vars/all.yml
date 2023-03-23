@@ -1,0 +1,6 @@
+---
+device_aliases:
+  10.0.6.1: router
+  10.0.6.23: transaction
+  100.100.100.1: router
+...

@@ -1,0 +1,11 @@
+
+- name: sanity check
+  fail:
+      msg: '{{ interface_sanity_check_msg }}'
+  when: interface_sanity_check_msg | length > 0
+
+- include: clean.yml
+  when: interface_clean is defined and interface_clean
+
+- include: interface.yml
+

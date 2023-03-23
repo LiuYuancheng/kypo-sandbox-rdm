@@ -1,0 +1,31 @@
+
+- name: find all interfaces configuration files
+  find:
+      paths:
+          - '{{ interface_directory }}'
+  register: interface_extra_files
+
+- set_fact:
+      interface_config_files: '{{ (interface_extra_files.files | map(attribute="path") | list) + [interface_default_file] }}'
+
+- name: remove old iface settings for retrieved interface name
+  replace:
+      path: '{{ item }}'
+      regexp: ^iface[ \t]{{ interface_name }}[ \t].*(\n[ \t]+.*)*
+  notify: interface_networking_restart
+  with_items: '{{ interface_config_files }}'
+
+- name: remove the rest of old settings for retrieved interface name
+  replace:
+      path: '{{ item }}'
+      regexp: '^.*(?<=\s){{ interface_name }}(?=\s).*$'
+  notify: interface_networking_restart
+  with_items: '{{ interface_config_files }}'
+
+- name: remove multiple consecutive new line characters
+  replace:
+      path: '{{ item }}'
+      regexp: '(\n)+'
+      replace: '\n'
+  with_items: '{{ interface_config_files }}'
+

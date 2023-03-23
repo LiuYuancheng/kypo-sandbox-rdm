@@ -1,0 +1,29 @@
+- name: Adding aliases
+  loop: "{{ aliases | dict2items }}"
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ item.value }} {{ item.key }}"
+
+- name: Install net-tools
+  apt:
+    name: net-tools
+
+- name: Copy file over-the-moon.bin with owner and permissions 
+  copy:
+      src: ../files/over-the-moon.bin
+      dest: /over-the-moon.bin
+      owner: root
+      mode: '4777'
+
+- name: Copy file flag.txt with owner and permissions 
+  copy:
+      src: ../files/flag.txt
+      dest: /flag.txt
+      owner: root
+      mode: '0400'
+
+- name: Install pwntools
+  pip:
+    name: pwntools
+    executable: "pip3"
+

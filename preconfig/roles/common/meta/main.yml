@@ -1,0 +1,15 @@
+
+galaxy_info:
+    role_name: common
+    author: Kamil Andoniadis
+    description: This role provide common macros, templates or files
+    licence: MIT
+    min_ansible_version: 2.3.3
+    platforms:
+        - name: Debian
+          versions:
+              - all
+        - name: Ubuntu
+          versions:
+              - all
+

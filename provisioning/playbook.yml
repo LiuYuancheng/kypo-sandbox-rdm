@@ -1,0 +1,62 @@
+---
+# Basic configuration of all defined devices
+
+# Installation of common tools at all hosts
+- name: Configuring hosts
+  hosts: hosts
+  become: yes
+  roles:
+    - hosts
+
+# Installation and configuration of each host
+- name: Configuring devices separately
+  hosts: hosts
+  become: yes
+  tasks:
+  - name: include role
+    include_role:
+      name: "{{ inventory_hostname }}"
+
+# Enable logging
+- hosts: transaction
+  become: true
+  tasks:
+    - name: Set DNS server on transaction
+      lineinfile:
+        path: /etc/resolv.conf
+        line: "nameserver 8.8.8.8"
+    - name: Add apt signing key
+      apt_key:
+        url: https://archive.kali.org/archive-key.asc
+        state: present
+
+- hosts: transaction
+  become: true
+  roles:
+      - chrony
+
+- name: setup logging bash
+  hosts:
+    - transaction
+  gather_facts: yes
+  become: yes
+  become_user: root
+  vars:
+    sandbox_name: junior-ctf-local
+    central_syslog_ip: 78.128.251.179
+  roles:
+    - role: sandbox-logging-forward
+      slf_destination: '{% if hostvars["man"] is defined -%} {{ hostvars["man"].ansible_host }} {%- else -%} {{ central_syslog_ip }} {%- endif %}'
+      slf_sandbox_id: "{{ kypo_global_sandbox_allocation_unit_id | default(student_id) | default(0) }}"
+      slf_sandbox_name: '{{ kypo_global_sandbox_name | default(sandbox_name) }}'
+      slf_pool_id: '{{ kypo_global_pool_id | default(None) }}'
+    - role: sandbox-logging-bash
+
+- name: setup logging msf
+  hosts:
+    - transaction
+  gather_facts: yes
+  become: yes
+  become_user: root
+  roles:
+    - role: sandbox-logging-msf

@@ -1,0 +1,35 @@
+name: junior-ctf-sandbox
+
+hosts:
+  - name: transaction
+    base_box: 
+      image: kali
+      mgmt_user: debian
+    flavor: csirtmu.tiny1x2
+
+routers:
+  - name: router
+    base_box:
+      image: debian-10
+      mgmt_user: debian
+    flavor: csirtmu.tiny1x2
+
+wan:
+  name: internet-connection
+  cidr: 100.100.100.0/24
+
+networks:
+  - name: switch
+    cidr: 10.0.6.0/24
+
+net_mappings:
+    - host: transaction
+      network: switch
+      ip: 10.0.6.23
+
+router_mappings:
+    - router: router
+      network: switch
+      ip: 10.0.6.1
+
+groups: []
