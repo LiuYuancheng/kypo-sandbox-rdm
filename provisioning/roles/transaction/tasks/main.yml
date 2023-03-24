@@ -9,7 +9,7 @@
       src: ../files/over-the-moon.bin
       dest: /over-the-moon.bin
       owner: root
-      mode: '4777'
+      mode: '4755'
 
 - name: Copy file flag.txt with owner and permissions 
   copy:
