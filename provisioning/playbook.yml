@@ -25,10 +25,10 @@
       lineinfile:
         path: /etc/resolv.conf
         line: "nameserver 8.8.8.8"
-    - name: Add apt signing key
-      apt_key:
-        url: https://archive.kali.org/archive-key.asc
-        state: present
+    # - name: Add apt signing key
+    #   apt_key:
+    #     url: https://archive.kali.org/archive-key.asc
+    #     state: present
 
 - hosts: transaction
   become: true
