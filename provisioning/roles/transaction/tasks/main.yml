@@ -4,10 +4,6 @@
     path: /etc/hosts
     line: "{{ item.value }} {{ item.key }}"
 
-- name: Install net-tools
-  apt:
-    name: net-tools
-
 - name: Copy file over-the-moon.bin with owner and permissions 
   copy:
       src: ../files/over-the-moon.bin
