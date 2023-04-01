@@ -5,7 +5,7 @@ hosts:
     base_box: 
       image: kali
       mgmt_user: debian
-    flavor: csirtmu.tiny1x2
+    flavor: standard.medium
 
 routers:
   - name: router
